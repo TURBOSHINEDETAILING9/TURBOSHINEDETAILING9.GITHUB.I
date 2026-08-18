@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turbo Shine Detailing — Book a Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0E11;
+    --surface:#171B1F;
+    --surface-2:#20262C;
+    --line:rgba(231,236,239,0.10);
+    --chrome:#E7ECEF;
+    --chrome-dim:#9BA6AD;
+    --boost:#9B5DE5;
+    --boost-dim:#6B2FA5;
+    --indicator:#3AA8FF;
+    --good:#3ECF8E;
+    --bad:#FF5C5C;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--chrome);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    color:#fff;
+    margin:0;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px;}
+  a{color:var(--indicator);}
+
+  /* ---------- Header ---------- */
+  header{
+    border-bottom:1px solid var(--line);
+    padding:22px 20px;
+    background:linear-gradient(180deg, rgba(155,93,229,0.08), transparent 70%);
+  }
+  .header-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{
+    width:40px;height:40px;border-radius:10px;
+    background:conic-gradient(from 220deg, var(--boost), #1c0f2e 60%, var(--boost));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Oswald',sans-serif;font-weight:700;color:#fff;font-size:15px;
+    box-shadow:0 0 0 1px var(--line), 0 8px 20px -6px rgba(155,93,229,0.55);
+  }
+  .brand-text h1{font-size:17px;letter-spacing:0.06em;}
+  .brand-text p{margin:2px 0 0;font-size:11.5px;color:var(--chrome-dim);text-transform:uppercase;letter-spacing:0.12em;}
+  .tel{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;color:var(--chrome);
+    border:1px solid var(--line);
+    padding:8px 12px;border-radius:100px;
+    background:var(--surface);
+    text-decoration:none;
+    display:flex;align-items:center;gap:8px;
+  }
+  .tel::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good);}
+
+  /* ---------- Hero / Gauge ---------- */
+  .hero{padding:44px 0 8px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
+  .gauge-box{flex:0 0 auto;}
+  .hero-copy{flex:1 1 280px;min-width:240px;}
+  .hero-copy h2{font-size:clamp(26px,5vw,34px);line-height:1.05;}
+  .hero-copy p{color:var(--chrome-dim);font-size:14.5px;margin-top:10px;max-width:38ch;}
+  .gauge{width:118px;height:118px;position:relative;}
+  .gauge svg{width:100%;height:100%;}
+  .gauge-needle{
+    transform-origin:59px 59px;
+    animation:sweep 1.4s cubic-bezier(.2,.9,.25,1) forwards;
+  }
+  @keyframes sweep{
+    0%{transform:rotate(-120deg);}
+    100%{transform:rotate(28deg);}
+  }
+  .gauge-label{
+    position:absolute;bottom:14px;left:0;right:0;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;
+    color:var(--boost);
+  }
+  .plate-field{display:flex;align-items:stretch;border-radius:9px;overflow:hidden;border:1px solid var(--line);}
+  .plate-gb{
+    background:#0052CC;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8px;letter-spacing:0.02em;
+    text-align:center;line-height:1.15;
+  }
+  .plate-gb span{font-size:13px;}
+  .plate-input{
+    flex:1;background:#FFD84D !important;color:#111 !important;font-family:'JetBrains Mono',monospace !important;
+    font-weight:700;font-size:18px;letter-spacing:0.14em;text-transform:uppercase;border:none !important;
+    border-radius:0 !important;
+  }
+  .plate-input:focus{outline:none !important;}
+  .vehicle-note{font-size:12px;color:var(--indicator);margin-top:6px;}
+  @media (prefers-reduced-motion:reduce){
+    .gauge-needle{animation:none;transform:rotate(28deg);}
+  }
+
+  /* ---------- Stepper ---------- */
+  .stepper{display:flex;gap:6px;margin:36px 0 28px;}
+  .step-pill{
+    flex:1;height:4px;border-radius:4px;background:var(--surface-2);overflow:hidden;position:relative;
+  }
+  .step-pill.done, .step-pill.active{background:var(--boost);}
+  .step-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--chrome-dim);margin-top:8px;text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace;}
+  .step-meta span{color:var(--chrome-dim);}
+  .step-meta span.current{color:var(--boost);}
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .panel + .panel{margin-top:16px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;
+    color:var(--boost);text-transform:uppercase;margin-bottom:6px;display:block;
+  }
+  .panel h3{font-size:19px;margin-bottom:14px;}
+
+  /* ---------- Services ---------- */
+  .svc-list{display:flex;flex-direction:column;gap:10px;}
+  .svc{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:14px 16px;border-radius:10px;border:1px solid var(--line);
+    background:var(--surface-2);cursor:pointer;transition:border-color .15s, background .15s;
+  }
+  .svc:hover{border-color:rgba(255,106,0,0.4);}
+  .svc.selected{border-color:var(--boost);background:linear-gradient(180deg, rgba(255,106,0,0.10), rgba(255,106,0,0.03));}
+  .svc-info h4{margin:0 0 4px;font-size:14.5px;color:#fff;font-weight:600;font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;}
+  .svc-info p{margin:0;font-size:12.5px;color:var(--chrome-dim);}
+  .svc-price{text-align:right;white-space:nowrap;}
+  .svc-price .p{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--boost);font-weight:600;}
+  .svc-price .d{font-size:11px;color:var(--chrome-dim);}
+
+  .size-toggle{display:flex;gap:8px;}
+  .size-btn{
+    flex:1;background:var(--surface-2);border:1px solid var(--line);color:var(--chrome);
+    padding:12px 8px;border-radius:10px;font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;
+    cursor:pointer;text-align:center;
+  }
+  .size-btn span{display:block;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:10.5px;color:var(--chrome-dim);text-transform:uppercase;letter-spacing:0.06em;margin-top:3px;}
+  .size-btn.active{border-color:var(--boost);background:linear-gradient(180deg, rgba(155,93,229,0.16), rgba(155,93,229,0.05));color:#fff;}
+  .size-btn.active span{color:var(--boost);}
+
+  /* ---------- Form fields ---------- */
+  label{display:block;font-size:12px;color:var(--chrome-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;}
+  input, textarea, select{
+    width:100%;background:var(--surface-2);border:1px solid var(--line);color:#fff;
+    padding:11px 12px;border-radius:9px;font-family:'Inter',sans-serif;font-size:14px;
+  }
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--boost);outline-offset:1px;border-color:transparent;}
+  .field{margin-bottom:14px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:520px){.row2{grid-template-columns:1fr;}}
+
+  .date-input-wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:end;}
+  .date-input-wrap .field{flex:1 1 160px;margin-bottom:0;}
+
+  .slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .slot{
+    padding:9px 13px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--chrome);cursor:pointer;
+  }
+  .slot:hover{border-color:var(--indicator);}
+  .slot.selected{background:var(--boost);border-color:var(--boost);color:#fff;font-weight:600;}
+  .slot.taken{opacity:0.32;text-decoration:line-through;cursor:not-allowed;}
+  .empty-note{font-size:12.5px;color:var(--chrome-dim);margin-top:10px;}
+
+  /* ---------- Buttons ---------- */
+  .btn-row{display:flex;justify-content:space-between;margin-top:22px;gap:10px;}
+  button{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;
+    padding:12px 20px;border-radius:9px;border:none;cursor:pointer;
+    transition:transform .1s, opacity .15s;
+  }
+  button:active{transform:scale(0.98);}
+  button:disabled{opacity:0.4;cursor:not-allowed;}
+  .btn-primary{background:var(--boost);color:#fff;}
+  .btn-primary:hover:not(:disabled){background:#B47BEC;}
+  .btn-ghost{background:transparent;color:var(--chrome-dim);border:1px solid var(--line);}
+  .btn-ghost:hover{color:#fff;border-color:var(--chrome-dim);}
+  .btn-full{width:100%;}
+
+  /* ---------- Summary / Confirm ---------- */
+  .summary-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row .k{color:var(--chrome-dim);}
+  .summary-row .v{color:#fff;font-weight:500;text-align:right;}
+
+  .confirm-screen{text-align:center;padding:20px 0;}
+  .confirm-badge{
+    width:56px;height:56px;border-radius:50%;background:rgba(62,207,142,0.12);
+    border:1px solid var(--good);display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;color:var(--good);font-size:26px;
+  }
+  .ref{font-family:'JetBrains Mono',monospace;color:var(--boost);font-size:14px;letter-spacing:0.05em;}
+
+  .error-text{color:var(--bad);font-size:12.5px;margin-top:6px;}
+
+  /* ---------- Footer / admin toggle ---------- */
+  footer{text-align:center;padding:30px 20px 40px;color:var(--chrome-dim);font-size:12px;}
+  .admin-link{background:none;border:none;color:var(--chrome-dim);text-decoration:underline;cursor:pointer;font-size:12px;padding:0;}
+
+  /* ---------- Admin ---------- */
+  .admin-wrap{max-width:900px;}
+  .admin-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .filter-group{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter-group select, .filter-group input{width:auto;font-size:12.5px;padding:8px 10px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--chrome-dim);padding:8px 10px;border-bottom:1px solid var(--line);}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .status-pill{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;
+    padding:4px 9px;border-radius:100px;display:inline-block;
+  }
+  .status-pending{background:rgba(58,168,255,0.14);color:var(--indicator);}
+  .status-confirmed{background:rgba(62,207,142,0.14);color:var(--good);}
+  .status-completed{background:rgba(155,166,173,0.16);color:var(--chrome-dim);}
+  .status-cancelled{background:rgba(255,92,92,0.14);color:var(--bad);}
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .row-actions button{padding:6px 9px;font-size:11px;border-radius:6px;}
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);}
+  table{min-width:640px;}
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
+  .stat-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;}
+  .stat-card .n{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--boost);}
+  .stat-card .l{font-size:11px;color:var(--chrome-dim);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
+
+  .hidden{display:none !important;}
+  .pin-box{max-width:280px;margin:60px auto;text-align:center;}
+  .pin-box input{text-align:center;letter-spacing:0.3em;font-family:'JetBrains Mono',monospace;font-size:18px;}
+
+  .loading-note{font-size:12.5px;color:var(--chrome-dim);text-align:center;padding:20px 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">TS</div>
+      <div class="brand-text">
+        <h1>Turbo<span style="color:#9B5DE5;"> Shine</span> Detailing</h1>
+        <p>Mildenhall · Mobile &amp; studio valeting</p>
+      </div>
+    </div>
+    <a class="tel" href="tel:00000000000" id="phoneLink">Call to check availability</a>
+  </div>
+</header>
+
+<!-- ============ CUSTOMER BOOKING VIEW ============ -->
+<main id="customerView" class="wrap">
+
+  <div class="hero">
+    <div class="gauge-box">
+      <div class="gauge">
+        <svg viewBox="0 0 118 118">
+          <circle cx="59" cy="59" r="52" fill="none" stroke="#20262C" stroke-width="8"/>
+          <path d="M 18 90 A 52 52 0 1 1 100 90" fill="none" stroke="#9B5DE5" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
+          <g class="gauge-needle">
+            <line x1="59" y1="59" x2="59" y2="20" stroke="#E7ECEF" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="59" cy="59" r="5" fill="#9B5DE5"/>
+          </g>
+        </svg>
+        <div class="gauge-label">BOOST</div>
+      </div>
+    </div>
+    <div class="hero-copy">
+      <h2>Book your detail</h2>
+      <p>Pick a service and a slot. No payment needed now — you pay in person once the job's done.</p>
+    </div>
+  </div>
+
+  <div class="stepper">
+    <div class="step-pill" data-step="1"></div>
+    <div class="step-pill" data-step="2"></div>
+    <div class="step-pill" data-step="3"></div>
+    <div class="step-pill" data-step="4"></div>
+  </div>
+  <div class="step-meta">
+    <span data-label="1">Service</span>
+    <span data-label="2">Date &amp; time</span>
+    <span data-label="3">Your details</span>
+    <span data-label="4">Confirm</span>
+  </div>
+
+  <!-- STEP 1: SERVICE -->
+  <section class="panel" id="step1">
+    <span class="eyebrow">Step 1</span>
+    <h3>Vehicle size</h3>
+    <div class="size-toggle" id="sizeToggle">
+      <button class="size-btn" data-size="small">Small<span>Hatchback</span></button>
+      <button class="size-btn" data-size="medium">Medium<span>Sedan</span></button>
+      <button class="size-btn" data-size="large">Large<span>SUV / 4x4</span></button>
+    </div>
+    <h3 style="margin-top:22px;">Choose a service</h3>
+    <div class="svc-list" id="svcList"></div>
+    <div class="btn-row">
+      <span></span>
+      <button class="btn-primary" id="toStep2" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- STEP 2: DATE & TIME -->
+  <section class="panel hidden" id="step2">
+    <span class="eyebrow">Step 2</span>
+    <h3>Pick a date &amp; time</h3>
+    <div class="date-input-wrap">
+      <div class="field">
+        <label for="dateInput">Date</label>
+        <input type="date" id="dateInput">
+      </div>
+    </div>
+    <div id="slotsArea"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" data-back="1">Back</button>
+      <button class="btn-primary" id="toStep3" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: DETAILS -->
+  <section class="panel hidden" id="step3">
+    <span class="eyebrow">Step 3</span>
+    <h3>Your details</h3>
+    <div class="field">
+      <label for="custName">Full name</label>
+      <input type="text" id="custName" placeholder="Jordan Smith">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="custPhone">Phone</label>
+        <input type="tel" id="custPhone" placeholder="07xxx xxxxxx">
+      </div>
+      <div class="field">
+        <label for="custEmail">Email (optional)</label>
+        <input type="email" id="custEmail" placeholder="you@example.com">
+      </div>
+    </div>
+    <div class="field">
+      <label for="custReg">Vehicle registration</label>
+      <div class="plate-field">
+        <div class="plate-gb">GB<span>🇬🇧</span></div>
+        <input type="text" id="custReg" class="plate-input" placeholder="AB12 CDE" maxlength="8">
+      </div>
+      <div class="vehicle-note hidden" id="regNote"></div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="custMake">Make</label>
+        <input type="text" id="custMake" placeholder="Ford">
+      </div>
+      <div class="field">
+        <label for="custModel">Model</label>
+        <input type="text" id="custModel" placeholder="Focus">
+      </div>
+    </div>
+    <div class="field">
+      <label for="custColour">Colour</label>
+      <input type="text" id="custColour" placeholder="Black">
+    </div>
+    <div class="field">
+      <label for="custNotes">Anything we should know? (optional)</label>
+      <textarea id="custNotes" rows="3" placeholder="Access notes, problem areas, etc."></textarea>
+    </div>
+    <div id="detailsError" class="error-text hidden"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" data-back="2">Back</button>
+      <button class="btn-primary" id="toStep4">Review booking</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: CONFIRM -->
+  <section class="panel hidden" id="step4">
+    <span class="eyebrow">Step 4</span>
+    <h3>Confirm your booking</h3>
+    <div id="summaryBox"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" data-back="3">Back</button>
+      <button class="btn-primary" id="submitBooking">Confirm booking</button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section class="panel hidden" id="stepDone">
+    <div class="confirm-screen">
+      <div class="confirm-badge">✓</div>
+      <h3 style="margin-bottom:6px;">Booking requested</h3>
+      <p style="color:var(--chrome-dim);font-size:13.5px;margin:0 0 14px;">Reference <span class="ref" id="refOut"></span></p>
+      <div id="summaryBoxFinal" style="text-align:left;"></div>
+      <button class="btn-primary btn-full" style="margin-top:20px;" id="newBookingBtn">Make another booking</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ ADMIN VIEW ============ -->
+<main id="adminView" class="wrap admin-wrap hidden">
+  <div class="pin-box" id="pinGate">
+    <span class="eyebrow">Staff area</span>
+    <h3 style="margin-bottom:14px;">Enter PIN</h3>
+    <input type="password" id="pinInput" inputmode="numeric" maxlength="4" placeholder="••••">
+    <div class="error-text hidden" id="pinError">Incorrect PIN</div>
+    <button class="btn-primary btn-full" style="margin-top:12px;" id="pinSubmit">Unlock</button>
+    <p style="font-size:11.5px;color:var(--chrome-dim);margin-top:14px;">Default PIN is 2580 — change it in the code before going live.</p>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+    <div class="admin-toolbar">
+      <h2 style="font-size:20px;">Bookings</h2>
+      <div class="filter-group">
+        <select id="statusFilter">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <input type="date" id="dateFilter">
+        <button class="btn-ghost" id="clearFilters">Clear</button>
+      </div>
+    </div>
+
+    <div class="stat-cards" id="statCards"></div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>When</th>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTbody"></tbody>
+      </table>
+    </div>
+    <div id="adminEmptyNote" class="loading-note hidden">No bookings yet.</div>
+  </div>
+</main>
+
+<footer>
+  Turbo Shine Detailing, Mildenhall &nbsp;·&nbsp;
+  <button class="admin-link" id="adminToggle">Staff login</button>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------- CONFIG ----------------
+  const ADMIN_PIN = "2580"; // change before going live
+  const BUSINESS_HOURS = { start: 8, end: 17 }; // 8am - 5pm
+  const CLOSED_DAYS = [0]; // Sunday closed (0=Sun)
+  const SLOT_STEP_MIN = 30;
+  const MAX_JOBS_PER_DAY = 2; // cap regardless of remaining hours, per your workflow
+
+  // Paste your Cloudflare Worker URL here once set up (see dvla-lookup-worker.js) to
+  // enable automatic reg lookup. Leave blank to just use the "remembers past regs" fallback.
+  const LOOKUP_ENDPOINT = "";
+
+  // Paste an ntfy.sh topic name here (see instructions) to get a phone notification
+  // the moment someone books. Leave blank to disable.
+  const NTFY_TOPIC = "TURBO-shine-detailing-booking-3907280355";
+
+  const SERVICES = [
+    { id:'basic',    name:'Basic Wash',              desc:'Exterior wash, wheels cleaned & dried.',                                          duration:45,  prices:{small:25,  medium:30,  large:35}  },
+    { id:'standard', name:'Standard Detail',         desc:'Exterior wash, wheels, interior vacuum, dash wipe, windows.',                     duration:120, prices:{small:55,  medium:65,  large:75}  },
+    { id:'full',     name:'Full Detail',             desc:'Exterior & interior deep clean, upholstery shampoo, trim dressing, deodorise.',    duration:300, prices:{small:95,  medium:110, large:130} },
+    { id:'showroom', name:'Showroom Detail',         desc:'Full detail plus paint polish, enhanced protection, showroom finish.',             duration:360, prices:{small:150, medium:170, large:200} },
+    { id:'gtech',    name:'G-Tech Ceramic Coating',  desc:'Premium ceramic coating, maximum durability, gloss & protection. 5yr warranty.',   duration:480, prices:{small:550, medium:650, large:750} },
+    { id:'guardx',   name:'Guard X Ceramic Coating', desc:'High performance ceramic coating, excellent protection & value. 3yr warranty.',    duration:480, prices:{small:350, medium:450, large:550} },
+  ];
+
+  // ---------------- STATE ----------------
+  let state = {
+    carSize: 'medium',
+    service: null,
+    date: null,
+    time: null,
+    name: '', phone: '', email: '', reg: '', make: '', model: '', colour: '', notes: ''
+  };
+  let allBookings = [];
+  let currentStep = 1;
+
+  // ---------------- VEHICLE LOOKUP ----------------
+  // Live lookup: only runs if you've deployed the Cloudflare Worker proxy (see
+  // dvla-lookup-worker.js) and pasted its URL into LOOKUP_ENDPOINT above.
+  async function liveLookup(reg){
+    if(!LOOKUP_ENDPOINT) return null;
+    try{
+      const res = await fetch(LOOKUP_ENDPOINT + '?reg=' + encodeURIComponent(normReg(reg)));
+      if(!res.ok) return null;
+      const data = await res.json();
+      if(data.error) return null;
+      return { make: data.make || '', model: data.model || '', colour: data.colour || '' };
+    }catch(e){
+      return null;
+    }
+  }
+
+  // Fallback / always-on: remembers any reg you've entered before, so returning
+  // vehicles auto-fill next time even without the live lookup set up.
+  function normReg(reg){ return reg.replace(/\s+/g,'').toUpperCase(); }
+
+  async function lookupVehicle(reg){
+    const key = 'vehicle:' + normReg(reg);
+    try{
+      const res = await window.storage.get(key, true);
+      return res && res.value ? JSON.parse(res.value) : null;
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function saveVehicle(reg, make, model, colour){
+    if(!reg) return;
+    const key = 'vehicle:' + normReg(reg);
+    try{
+      await window.storage.set(key, JSON.stringify({ make, model, colour, updatedAt: new Date().toISOString() }), true);
+    }catch(e){ /* non-fatal */ }
+  }
+
+  // ---------------- STORAGE ----------------
+  async function loadBookings(){
+    try{
+      const res = await window.storage.get('all-bookings', true);
+      allBookings = res && res.value ? JSON.parse(res.value) : [];
+    }catch(e){
+      allBookings = [];
+    }
+    return allBookings;
+  }
+
+  async function saveBookings(){
+    try{
+      const result = await window.storage.set('all-bookings', JSON.stringify(allBookings), true);
+      return !!result;
+    }catch(e){
+      console.error('Storage error', e);
+      return false;
+    }
+  }
+
+  // ---------------- UTIL ----------------
+  function fmtMoney(n){ return '£' + n.toFixed(0); }
+  function fmtDate(iso){
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+  }
+  function minutesToLabel(mins){
+    const h = Math.floor(mins/60), m = mins%60;
+    const period = h >= 12 ? 'PM' : 'AM';
+    let h12 = h % 12; if(h12 === 0) h12 = 12;
+    return h12 + (m ? ':' + String(m).padStart(2,'0') : ':00') + ' ' + period;
+  }
+  function genRef(){
+    return 'TSD-' + Math.random().toString(36).substring(2,7).toUpperCase();
+  }
+
+  // ---------------- SLOT GENERATION ----------------
+  function getBookingsForDate(dateStr){
+    return allBookings.filter(b => b.date === dateStr && b.status !== 'cancelled');
+  }
+
+  function isSlotFree(dateStr, startMin, duration){
+    const dayBookings = getBookingsForDate(dateStr);
+    const endMin = startMin + duration;
+    for(const b of dayBookings){
+      const bStart = b.startMin;
+      const bEnd = b.startMin + b.duration;
+      if(startMin < bEnd && endMin > bStart) return false;
+    }
+    return true;
+  }
+
+  function buildSlots(dateStr, duration){
+    const d = new Date(dateStr + 'T00:00:00');
+    const slots = [];
+    if(CLOSED_DAYS.includes(d.getDay())) return slots;
+    const dayBookings = getBookingsForDate(dateStr);
+    if(dayBookings.length >= MAX_JOBS_PER_DAY) return slots;
+    const startMin = BUSINESS_HOURS.start * 60;
+    const endMin = BUSINESS_HOURS.end * 60;
+    for(let t = startMin; t + duration <= endMin; t += SLOT_STEP_MIN){
+      slots.push({ startMin: t, free: isSlotFree(dateStr, t, duration) });
+    }
+    return slots;
+  }
+
+  // ---------------- RENDER: SIZE TOGGLE ----------------
+  function renderSizeToggle(){
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.size === state.carSize);
+    });
+  }
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.carSize = btn.dataset.size;
+      renderSizeToggle();
+      renderServices();
+    });
+  });
+
+  // ---------------- RENDER: SERVICES ----------------
+  function renderServices(){
+    const list = document.getElementById('svcList');
+    list.innerHTML = '';
+    SERVICES.forEach(svc => {
+      const price = svc.prices[state.carSize];
+      const el = document.createElement('div');
+      el.className = 'svc' + (state.service && state.service.id === svc.id ? ' selected' : '');
+      el.innerHTML = `
+        <div class="svc-info">
+          <h4>${svc.name}</h4>
+          <p>${svc.desc}</p>
+        </div>
+        <div class="svc-price">
+          <div class="p">${fmtMoney(price)}</div>
+          <div class="d">${svc.duration >= 60 ? (svc.duration/60) + 'h' : svc.duration + ' min'}</div>
+        </div>`;
+      el.addEventListener('click', () => {
+        state.service = svc;
+        state.date = null; state.time = null;
+        renderServices();
+        document.getElementById('toStep2').disabled = false;
+      });
+      list.appendChild(el);
+    });
+  }
+
+  // ---------------- RENDER: SLOTS ----------------
+  function renderSlots(){
+    const area = document.getElementById('slotsArea');
+    const dateVal = document.getElementById('dateInput').value;
+    document.getElementById('toStep3').disabled = true;
+    if(!dateVal || !state.service){
+      area.innerHTML = '';
+      return;
+    }
+    const d = new Date(dateVal + 'T00:00:00');
+    const dayBookings = getBookingsForDate(dateVal);
+    if(CLOSED_DAYS.includes(d.getDay())){
+      area.innerHTML = '<p class="empty-note">We\'re closed that day. Try another date.</p>';
+      return;
+    }
+    if(dayBookings.length >= MAX_JOBS_PER_DAY){
+      area.innerHTML = '<p class="empty-note">Fully booked that day — try another date.</p>';
+      return;
+    }
+    const slots = buildSlots(dateVal, state.service.duration);
+    if(slots.length === 0){
+      area.innerHTML = '<p class="empty-note">Not enough time left that day for this job. Try another date.</p>';
+      return;
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'slots';
+    slots.forEach(s => {
+      const btn = document.createElement('div');
+      btn.className = 'slot' + (!s.free ? ' taken' : '') + (state.time === s.startMin && state.date === dateVal ? ' selected' : '');
+      btn.textContent = minutesToLabel(s.startMin);
+      if(s.free){
+        btn.addEventListener('click', () => {
+          state.date = dateVal;
+          state.time = s.startMin;
+          renderSlots();
+          document.getElementById('toStep3').disabled = false;
+        });
+      }
+      wrap.appendChild(btn);
+    });
+    area.innerHTML = '';
+    area.appendChild(wrap);
+  }
+
+  // ---------------- RENDER: SUMMARY ----------------
+  function summaryHTML(){
+    return `
+      <div class="summary-row"><span class="k">Vehicle size</span><span class="v">${state.carSize.charAt(0).toUpperCase()+state.carSize.slice(1)}</span></div>
+      <div class="summary-row"><span class="k">Service</span><span class="v">${state.service.name}</span></div>
+      <div class="summary-row"><span class="k">Date</span><span class="v">${fmtDate(state.date)}</span></div>
+      <div class="summary-row"><span class="k">Time</span><span class="v">${minutesToLabel(state.time)}</span></div>
+      <div class="summary-row"><span class="k">Duration</span><span class="v">${state.service.duration >= 60 ? (state.service.duration/60) + ' hours' : state.service.duration + ' min'}</span></div>
+      <div class="summary-row"><span class="k">Price</span><span class="v">${fmtMoney(state.service.prices[state.carSize])} (pay after)</span></div>
+      <div class="summary-row"><span class="k">Name</span><span class="v">${state.name}</span></div>
+      <div class="summary-row"><span class="k">Phone</span><span class="v">${state.phone}</span></div>
+      ${state.email ? `<div class="summary-row"><span class="k">Email</span><span class="v">${state.email}</span></div>` : ''}
+      <div class="summary-row"><span class="k">Registration</span><span class="v">${state.reg}</span></div>
+      <div class="summary-row"><span class="k">Vehicle</span><span class="v">${state.colour} ${state.make} ${state.model}</span></div>
+      ${state.notes ? `<div class="summary-row"><span class="k">Notes</span><span class="v">${state.notes}</span></div>` : ''}
+    `;
+  }
+
+  // ---------------- STEP NAV ----------------
+  function goToStep(n){
+    currentStep = n;
+    [1,2,3,4].forEach(i => {
+      document.getElementById('step'+i).classList.toggle('hidden', i !== n);
+      const pill = document.querySelector(`.step-pill[data-step="${i}"]`);
+      pill.classList.toggle('active', i === n);
+      pill.classList.toggle('done', i < n);
+    });
+    document.getElementById('stepDone').classList.add('hidden');
+    document.querySelectorAll('.step-meta span').forEach(s => {
+      s.classList.toggle('current', Number(s.dataset.label) === n);
+    });
+    if(n === 2) renderSlots();
+    if(n === 4) document.getElementById('summaryBox').innerHTML = summaryHTML();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', () => goToStep(Number(btn.dataset.back)));
+  });
+  document.getElementById('toStep2').addEventListener('click', () => goToStep(2));
+  document.getElementById('dateInput').addEventListener('change', renderSlots);
+  document.getElementById('toStep3').addEventListener('click', () => goToStep(3));
+
+  const regInput = document.getElementById('custReg');
+  regInput.addEventListener('input', () => {
+    regInput.value = regInput.value.toUpperCase();
+  });
+  regInput.addEventListener('blur', async () => {
+    const reg = regInput.value.trim();
+    const note = document.getElementById('regNote');
+    if(!reg){ note.classList.add('hidden'); return; }
+    note.textContent = 'Looking up…';
+    note.classList.remove('hidden');
+
+    let info = await liveLookup(reg);
+    let source = 'live';
+    if(!info){
+      info = await lookupVehicle(reg);
+      source = 'remembered';
+    }
+    if(info){
+      document.getElementById('custMake').value = info.make || '';
+      document.getElementById('custModel').value = info.model || '';
+      document.getElementById('custColour').value = info.colour || '';
+      note.textContent = source === 'live'
+        ? 'Found it automatically — check the details below.'
+        : 'Welcome back — we recognise this reg. Update the details if anything\'s changed.';
+    }else{
+      note.textContent = 'New reg — pop the make, model and colour in below.';
+    }
+  });
+
+  document.getElementById('toStep4').addEventListener('click', () => {
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const email = document.getElementById('custEmail').value.trim();
+    const reg = document.getElementById('custReg').value.trim();
+    const make = document.getElementById('custMake').value.trim();
+    const model = document.getElementById('custModel').value.trim();
+    const colour = document.getElementById('custColour').value.trim();
+    const notes = document.getElementById('custNotes').value.trim();
+    const errEl = document.getElementById('detailsError');
+
+    if(!name || !phone || !reg || !make || !model){
+      errEl.textContent = 'Please fill in your name, phone, registration, make and model.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      errEl.textContent = 'That email doesn\'t look right — check it or leave it blank.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    errEl.classList.add('hidden');
+    state.name = name; state.phone = phone; state.email = email;
+    state.reg = reg; state.make = make; state.model = model; state.colour = colour;
+    state.notes = notes;
+    goToStep(4);
+  });
+
+  document.getElementById('submitBooking').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    btn.textContent = 'Booking…';
+
+    // re-check the slot is still free (in case someone else grabbed it)
+    await loadBookings();
+    if(!isSlotFree(state.date, state.time, state.service.duration)){
+      btn.disabled = false;
+      btn.textContent = 'Confirm booking';
+      alert('Sorry — that slot was just taken. Please pick another time.');
+      goToStep(2);
+      return;
+    }
+
+    const ref = genRef();
+    const booking = {
+      id: ref,
+      carSize: state.carSize,
+      service: state.service.name,
+      duration: state.service.duration,
+      price: state.service.prices[state.carSize],
+      date: state.date,
+      startMin: state.time,
+      name: state.name,
+      phone: state.phone,
+      email: state.email,
+      reg: state.reg,
+      make: state.make,
+      model: state.model,
+      colour: state.colour,
+      notes: state.notes,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    allBookings.push(booking);
+    const ok = await saveBookings();
+    await saveVehicle(state.reg, state.make, state.model, state.colour);
+
+    if(ok && NTFY_TOPIC){
+      try{
+        await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+          method: 'POST',
+          body: `${booking.name} booked ${booking.service} (${booking.colour} ${booking.make} ${booking.model}, ${booking.reg}) on ${fmtDate(booking.date)} at ${minutesToLabel(booking.startMin)}. Ref ${ref}. Call: ${booking.phone}`,
+          headers: { 'Title': 'New Turbo Shine booking', 'Priority': 'high' }
+        });
+      }catch(e){ /* notification failing should never block the booking */ }
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Confirm booking';
+
+    if(!ok){
+      alert('Something went wrong saving your booking — please try again, or call to book directly.');
+      return;
+    }
+
+    document.getElementById('refOut').textContent = ref;
+    document.getElementById('summaryBoxFinal').innerHTML = summaryHTML();
+    [1,2,3,4].forEach(i => document.getElementById('step'+i).classList.add('hidden'));
+    document.getElementById('stepDone').classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  document.getElementById('newBookingBtn').addEventListener('click', () => {
+    state = { carSize:'medium', service:null, date:null, time:null, name:'', phone:'', email:'', reg:'', make:'', model:'', colour:'', notes:'' };
+    document.getElementById('custName').value = '';
+    document.getElementById('custPhone').value = '';
+    document.getElementById('custEmail').value = '';
+    document.getElementById('custReg').value = '';
+    document.getElementById('custMake').value = '';
+    document.getElementById('custModel').value = '';
+    document.getElementById('custColour').value = '';
+    document.getElementById('regNote').classList.add('hidden');
+    document.getElementById('custNotes').value = '';
+    document.getElementById('dateInput').value = '';
+    document.getElementById('toStep2').disabled = true;
+    renderSizeToggle();
+    renderServices();
+    document.getElementById('stepDone').classList.add('hidden');
+    goToStep(1);
+  });
+
+  // ---------------- ADMIN ----------------
+  document.getElementById('adminToggle').addEventListener('click', () => {
+    document.getElementById('customerView').classList.add('hidden');
+    document.getElementById('adminView').classList.remove('hidden');
+    window.scrollTo({top:0});
+  });
+
+  document.getElementById('pinSubmit').addEventListener('click', unlockAdmin);
+  document.getElementById('pinInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') unlockAdmin(); });
+
+  async function unlockAdmin(){
+    const val = document.getElementById('pinInput').value;
+    if(val === ADMIN_PIN){
+      document.getElementById('pinGate').classList.add('hidden');
+      document.getElementById('adminPanel').classList.remove('hidden');
+      await loadBookings();
+      renderAdmin();
+    }else{
+      document.getElementById('pinError').classList.remove('hidden');
+    }
+  }
+
+  document.getElementById('statusFilter').addEventListener('change', renderAdmin);
+  document.getElementById('dateFilter').addEventListener('change', renderAdmin);
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    document.getElementById('statusFilter').value = 'all';
+    document.getElementById('dateFilter').value = '';
+    renderAdmin();
+  });
+
+  function renderAdmin(){
+    const statusVal = document.getElementById('statusFilter').value;
+    const dateVal = document.getElementById('dateFilter').value;
+
+    let filtered = allBookings.slice().sort((a,b) => {
+      if(a.date !== b.date) return a.date < b.date ? -1 : 1;
+      return a.startMin - b.startMin;
+    });
+    if(statusVal !== 'all') filtered = filtered.filter(b => b.status === statusVal);
+    if(dateVal) filtered = filtered.filter(b => b.date === dateVal);
+
+    // stat cards (based on full set, not filtered)
+    const today = new Date().toISOString().slice(0,10);
+    const stats = {
+      total: allBookings.length,
+      pending: allBookings.filter(b=>b.status==='pending').length,
+      today: allBookings.filter(b=>b.date===today && b.status!=='cancelled').length,
+      revenuePending: allBookings.filter(b=>b.status!=='cancelled').reduce((s,b)=>s+b.price,0)
+    };
+    document.getElementById('statCards').innerHTML = `
+      <div class="stat-card"><div class="n">${stats.total}</div><div class="l">Total bookings</div></div>
+      <div class="stat-card"><div class="n">${stats.pending}</div><div class="l">Awaiting confirm</div></div>
+      <div class="stat-card"><div class="n">${stats.today}</div><div class="l">Booked today</div></div>
+      <div class="stat-card"><div class="n">${fmtMoney(stats.revenuePending)}</div><div class="l">Total booked value</div></div>
+    `;
+
+    const tbody = document.getElementById('bookingsTbody');
+    tbody.innerHTML = '';
+    document.getElementById('adminEmptyNote').classList.toggle('hidden', filtered.length > 0);
+
+    filtered.forEach(b => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="mono">${fmtDate(b.date)}<br>${minutesToLabel(b.startMin)}</td>
+        <td>${b.name}<br><span style="color:var(--chrome-dim);font-size:12px;">${b.phone}</span></td>
+        <td>${b.service}<br><span style="color:var(--chrome-dim);font-size:12px;">${fmtMoney(b.price)} · ${b.duration}min</span></td>
+        <td class="mono">${b.reg || ''}<br><span style="color:var(--chrome-dim);font-size:12px;font-family:'Inter',sans-serif;">${b.colour || ''} ${b.make || ''} ${b.model || ''}</span></td>
+        <td><span class="status-pill status-${b.status}">${b.status}</span></td>
+        <td class="row-actions"></td>
+      `;
+      const actionsTd = tr.querySelector('.row-actions');
+      const actions = [];
+      if(b.status === 'pending') actions.push(['Confirm','confirmed','btn-primary']);
+      if(b.status === 'confirmed') actions.push(['Complete','completed','btn-primary']);
+      if(b.status !== 'cancelled' && b.status !== 'completed') actions.push(['Cancel','cancelled','btn-ghost']);
+      actions.forEach(([label, newStatus, cls]) => {
+        const abtn = document.createElement('button');
+        abtn.textContent = label;
+        abtn.className = cls;
+        abtn.addEventListener('click', async () => {
+          b.status = newStatus;
+          await saveBookings();
+          renderAdmin();
+        });
+        actionsTd.appendChild(abtn);
+      });
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Delete';
+      delBtn.className = 'btn-ghost';
+      delBtn.addEventListener('click', async () => {
+        if(!confirm('Delete this booking permanently?')) return;
+        allBookings = allBookings.filter(x => x.id !== b.id);
+        await saveBookings();
+        renderAdmin();
+      });
+      actionsTd.appendChild(delBtn);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------------- INIT ----------------
+  (async function init(){
+    const dateInput = document.getElementById('dateInput');
+    const todayStr = new Date().toISOString().slice(0,10);
+    dateInput.min = todayStr;
+    renderSizeToggle();
+    renderServices();
+    await loadBookings();
+  })();
+
+})();
+</script>
+</body>
+</html>
