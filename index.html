@@ -521,23 +521,32 @@
   function normReg(reg){ return reg.replace(/\s+/g,'').toUpperCase(); }
 
   async function lookupVehicle(reg){
-    const key = 'vehicle:' + normReg(reg);
-    try{
-      const res = await window.storage.get(key, true);
-      return res && res.value ? JSON.parse(res.value) : null;
-    }catch(e){
-      return null;
-    }
-  }
+  if(!reg) return null;
 
-  async function saveVehicle(reg, make, model, colour){
-    if(!reg) return;
-    const key = 'vehicle:' + normReg(reg);
-    try{
-      await window.storage.set(key, JSON.stringify({ make, model, colour, updatedAt: new Date().toISOString() }), true);
-    }catch(e){ /* non-fatal */ }
-  }
+  const key = 'vehicle:' + normReg(reg);
 
+  try{
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function saveVehicle(reg, make, model, colour){
+  if(!reg) return;
+
+  const key = 'vehicle:' + normReg(reg);
+
+  try{
+    localStorage.setItem(
+      key,
+      JSON.stringify({make, model, colour})
+    );
+  }catch(e){
+    /* non-fatal */
+  }
+}
   // ---------------- STORAGE ----------------
   async function loadBookings(){
     try{
